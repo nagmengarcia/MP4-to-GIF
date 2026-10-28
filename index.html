@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fcf7f1">
+  <title>MP4 → GIF | Convertidor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="brand-mark">GIF</div>
+      <div>
+        <p class="eyebrow">CONVERTIDOR LOCAL</p>
+        <h1>Video a GIF</h1>
+        <p class="subtitle">Convertí MP4 a GIF y controlá el peso final.</p>
+      </div>
+    </header>
+
+    <section class="panel">
+      <label class="dropzone" id="dropzone" for="videoInput">
+        <span class="upload-icon" aria-hidden="true">↑</span>
+        <strong id="fileLabel">Elegí un video MP4</strong>
+        <span class="muted">Tocá para seleccionar un archivo</span>
+        <input id="videoInput" type="file" accept="video/mp4,video/*">
+      </label>
+      <video id="videoPreview" controls playsinline hidden></video>
+      <p class="file-meta" id="fileMeta" hidden></p>
+    </section>
+
+    <section class="panel settings">
+      <div class="section-heading">
+        <h2>Configuración</h2>
+        <span class="step">01 / 02</span>
+      </div>
+
+      <div class="field">
+        <label for="maxSize">Peso máximo del GIF</label>
+        <div class="inline-input">
+          <input id="maxSize" type="number" min="1" step="1" value="5" inputmode="decimal">
+          <select id="sizeUnit" aria-label="Unidad de peso">
+            <option value="MB" selected>MB</option>
+            <option value="KB">KB</option>
+          </select>
+        </div>
+        <p class="hint">El convertidor probará distintas calidades para intentar respetar este límite.</p>
+      </div>
+
+      <div class="field">
+        <div class="range-heading"><label for="width">Ancho de salida</label><output id="widthOut">480 px</output></div>
+        <input id="width" type="range" min="160" max="960" step="40" value="480">
+        <div class="range-labels"><span>160 px</span><span>960 px</span></div>
+      </div>
+
+      <div class="field">
+        <div class="range-heading"><label for="fps">Fotogramas por segundo</label><output id="fpsOut">12 FPS</output></div>
+        <input id="fps" type="range" min="5" max="24" step="1" value="12">
+        <div class="range-labels"><span>5 FPS · menor peso</span><span>24 FPS · más fluido</span></div>
+      </div>
+
+      <div class="two-fields">
+        <div class="field">
+          <label for="start">Inicio (segundos)</label>
+          <input id="start" type="number" min="0" step="0.1" value="0" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="duration">Duración (segundos)</label>
+          <input id="duration" type="number" min="0.5" step="0.5" value="5" inputmode="decimal">
+        </div>
+      </div>
+      <p class="hint">Para un GIF más liviano, recortá la duración, bajá el ancho o reducÍ los FPS.</p>
+
+      <button id="convertBtn" class="primary" disabled>Convertir a GIF</button>
+      <div id="progressWrap" class="progress-wrap" hidden>
+        <div class="progress-top"><span id="status">Preparando conversión…</span><span id="percent">0%</span></div>
+        <progress id="progress" max="100" value="0"></progress>
+      </div>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel result" id="resultPanel" hidden>
+      <div class="section-heading">
+        <h2>Resultado</h2>
+        <span class="step">02 / 02</span>
+      </div>
+      <img id="gifResult" alt="Vista previa del GIF convertido">
+      <div class="result-stats">
+        <div><span class="muted">Peso final</span><strong id="resultSize">—</strong></div>
+        <div><span class="muted">Límite</span><strong id="resultLimit">—</strong></div>
+      </div>
+      <p id="resultNote" class="hint"></p>
+      <a id="downloadBtn" class="primary download" download="convertido.gif">Descargar GIF</a>
+    </section>
+
+    <footer>
+      <p>El video se procesa en tu navegador. No se sube a un servidor.</p>
+      <p class="tiny">La primera conversión puede tardar mientras se carga FFmpeg. Los videos largos o pesados pueden superar la memoria disponible del móvil.</p>
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+  <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
